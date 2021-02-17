@@ -80,13 +80,6 @@ if %drive%==exit GOTO menu
 
 cls
 echo.
-echo  :: Disabling Windows Update
-timeout /t 2 /nobreak > NUL
-net stop wuauserv
-sc config wuauserv start= disabled
-
-cls
-echo.
 echo  :: Disabling Data Logging Services
 timeout /t 2 /nobreak > NUL
 taskkill /f /im explorer.exe
@@ -140,7 +133,6 @@ reg add "HKLM\Software\Microsoft\PolicyManager\default\WiFi\AllowAutoConnectToWi
 reg add "HKCU\SOFTWARE\Microsoft\Windows\CurrentVersion\AdvertisingInfo" /v Enabled /t REG_DWORD /d 0 /f > NUL 2>&1
 reg add "HKCU\SOFTWARE\Microsoft\Windows\CurrentVersion\AppHost" /v EnableWebContentEvaluation /t REG_DWORD /d 0 /f > NUL 2>&1
 reg add "HKCU\Control Panel\International\User Profile" /v HttpAcceptLanguageOptOut /t REG_DWORD /d 1 /f > NUL 2>&1
-reg add "HKCU\Software\Policies\Microsoft\Windows\Explorer" /v DisableNotificationCenter /t REG_DWORD /d 1 /f > NUL 2>&1
 reg add "HKLM\Software\Microsoft\Windows\CurrentVersion\ImmersiveShell" /v UseActionCenterExperience /t REG_DWORD /d 0 /f > NUL 2>&1
 reg add "HKLM\Software\Microsoft\Windows\CurrentVersion\Policies\Explorer" /v HideSCAHealth /t REG_DWORD /d 0x1 /f > NUL 2>&1
 reg add "HKCU\SOFTWARE\Microsoft\Windows\CurrentVersion\GameDVR" /v AppCaptureEnabled /t REG_DWORD /d 0 /f > NUL 2>&1
@@ -163,10 +155,6 @@ reg delete "HKLM\SOFTWARE\Classes\SystemFileAssociations\.tiff\Shell\3D Edit" /f
 :: Turns off Windows blocking installation of files downloaded from the internet
 reg add "HKLM\SOFTWARE\Microsoft\Windows\CurrentVersion\Policies\Attachments" /v SaveZoneInformation /t REG_DWORD /d 1 /f > NUL 2>&1
 reg add "HKCU\SOFTWARE\Microsoft\Windows\CurrentVersion\Policies\Attachments" /v SaveZoneInformation /t REG_DWORD /d 1 /f > NUL 2>&1
-
-:: Disables SmartScreen
-reg add "HKLM\SOFTWARE\Microsoft\Windows\CurrentVersion\Explorer" /v SmartScreenEnabled /t REG_SZ /d "Off" /f > NUL 2>&1
-reg add "HKCU\SOFTWARE\Microsoft\Windows\CurrentVersion\AppHost" /v ContentEvaluation /t REG_DWORD /d 0 /f > NUL 2>&1
 
 :: Remove Metadata Tracking
 reg delete "HKLM\SOFTWARE\Microsoft\Windows\CurrentVersion\Device Metadata" /f > NUL 2>&1
@@ -277,10 +265,6 @@ reg add "HKEY_USERS\%currentusername%\SOFTWARE\Policies\Microsoft\Windows\Explor
 reg add "HKLM\SYSTEM\ControlSet001\Services\SharedAccess\Parameters\FirewallPolicy\FirewallRules" /v "Block Search SearchApp.exe" /t REG_SZ /d "v2.30|Action=Block|Active=TRUE|Dir=Out|RA42=IntErnet|RA62=IntErnet|App=C:\Windows\SystemApps\Microsoft.Windows.Search_cw5n1h2txyewy\SearchApp.exe|Name=Block Search SearchUI.exe|Desc=Block Cortana Outbound UDP/TCP Traffic|"/f > NUL 2>&1
 ::reg add "HKLM\SYSTEM\ControlSet001\Services\SharedAccess\Parameters\FirewallPolicy\FirewallRules" /v "Block Search Package" /t REG_SZ /d "v2.30|Action=Block|Active=TRUE|Dir=Out|RA42=IntErnet|RA62=IntErnet|Name=Block Search Package|Desc=Block Search Outbound UDP/TCP Traffic|AppPkgId=S-1-15-2-536077884-713174666-1066051701-3219990555-339840825-1966734348-1611281757|Platform=2:6:2|Platform2=GTEQ|"/f > NUL 2>&1
 
-
-:: Disable Timeline
-reg add "HKLM\SOFTWARE\Policies\Microsoft\Windows\System" /v "EnableActivityFeed" /t REG_DWORD /d 0 /f > NUL 2>&1
-
 :: Fixing Windows Explorer
 cls
 echo.
@@ -298,15 +282,6 @@ reg delete "HKEY_CLASSES_ROOT\SystemFileAssociations\.zip\CLSID" /f > NUL 2>&1
 ::reg add "HKLM\SYSTEM\CurrentControlSet\Control\Session Manager\Memory Management" /v ClearPageFileAtShutdown /t REG_DWORD /d 1 /f > NUL 2>&1
 reg add "HKLM\SYSTEM\CurrentControlSet\Services\NlaSvc\Parameters\Internet" /v EnableActiveProbing /t REG_DWORD /d 0 /f > NUL 2>&1
 
-:: Set Time to UTC
-reg add "HKLM\SYSTEM\CurrentControlSet\Control\TimeZoneInformation" /v RealTimeIsUniversal /t REG_DWORD /d 1 /f > NUL 2>&1
-
-::Disable Users On Login Screen
-reg add "HKLM\Software\Microsoft\Windows\CurrentVersion\Policies\System" /v dontdisplaylastusername /t REG_DWORD /d 1 /f > NUL 2>&1
-
-::Disable The Lock Screen
-reg add "HKLM\SOFTWARE\Policies\Microsoft\Windows\Personalization" /v NoLockScreen /t REG_DWORD /d 1 /f > NUL 2>&1
-
 :: Removing AppXPackages, the ModernUI Apps, including Cortana
 cls
 echo.
@@ -321,7 +296,6 @@ PowerShell -Command "Get-AppxPackage *3DViewer* | Remove-AppxPackage"
 PowerShell -Command "Get-AppxPackage *AssignedAccessLockApp* | Remove-AppxPackage"
 PowerShell -Command "Get-AppxPackage *PinningConfirmationDialog* | Remove-AppxPackage"
 PowerShell -Command "Get-AppxPackage *SecureAssessmentBrowser* | Remove-AppxPackage"
-PowerShell -Command "Get-AppxPackage *Windows.SecHealth* | Remove-AppxPackage"
 PowerShell -Command "Get-AppxPackage *FeedbackHub* | Remove-AppxPackage"
 PowerShell -Command "Get-AppxPackage *MixedReality* | Remove-AppxPackage"
 PowerShell -Command "Get-AppxPackage *Microsoft.Caclulator* | Remove-AppxPackage"
@@ -333,32 +307,24 @@ PowerShell -Command "Get-AppxPackage *WindowsAlarms* | Remove-AppxPackage"
 PowerShell -Command "Get-AppxPackage *WindowsCamera* | Remove-AppxPackage"
 PowerShell -Command "Get-AppxPackage *bing* | Remove-AppxPackage"
 PowerShell -Command "Get-AppxPackage *Sticky* | Remove-AppxPackage"
-PowerShell -Command "Get-AppxPackage *Store* | Remove-AppxPackage"
 PowerShell -Command "Get-AppxPackage *MicrosoftOfficeHub* | Remove-AppxPackage"
 PowerShell -Command "Get-AppxPackage *ECApp* | Remove-AppxPackage"
-PowerShell -Command "Get-AppxPackage *MSPaint* | Remove-AppxPackage"
 PowerShell -Command "Get-AppxPackage *wallet* | Remove-AppxPackage"
 PowerShell -Command "Get-AppxPackage *OneNote* | Remove-AppxPackage"
 PowerShell -Command "Get-AppxPackage *people* | Remove-AppxPackage"
-PowerShell -Command "Get-AppxPackage *LockApp* | Remove-AppxPackage"
 PowerShell -Command "Get-AppxPackage *MicrosoftEdgeDevToolsClient* | Remove-AppxPackage"
 PowerShell -Command "Get-AppxPackage *WindowsPhone* | Remove-AppxPackage"
 PowerShell -Command "Get-AppxPackage *YourPhone* | Remove-AppxPackage"
-PowerShell -Command "Get-AppxPackage *photos* | Remove-AppxPackage"
 PowerShell -Command "Get-AppxPackage *SkypeApp* | Remove-AppxPackage"
 PowerShell -Command "Get-AppxPackage *solit* | Remove-AppxPackage"
 PowerShell -Command "Get-AppxPackage *WindowsSoundRecorder* | Remove-AppxPackage"
 PowerShell -Command "Get-AppxPackage *xbox* | Remove-AppxPackage"
 PowerShell -Command "Get-AppxPackage *windowscommunicationsapps* | Remove-AppxPackage"
 PowerShell -Command "Get-AppxPackage *zune* | Remove-AppxPackage"
-PowerShell -Command "Get-AppxPackage *WindowsCalculator* | Remove-AppxPackage"
 PowerShell -Command "Get-AppxPackage *WindowsMaps* | Remove-AppxPackage"
 PowerShell -Command "Get-AppxPackage *Sway* | Remove-AppxPackage"
 PowerShell -Command "Get-AppxPackage *CommsPhone* | Remove-AppxPackage"
-PowerShell -Command "Get-AppxPackage *ConnectivityStore* | Remove-AppxPackage"
 PowerShell -Command "Get-AppxPackage *Microsoft.Messaging* | Remove-AppxPackage"
-PowerShell -Command "Get-AppxPackage *ContentDeliveryManager* | Remove-AppxPackage"
-PowerShell -Command "Get-AppxPackage *Microsoft.WindowsStore* | Remove-AppxPackage"
 
 :: Disabling One Drive
 cls
@@ -582,18 +548,6 @@ echo Extracting...
 7z x silent_installers.7z > NUL 2>&1
 cls
 echo.
-echo  :: Installing Old Calculator for Windows 10
-echo.
-start OldCalculatorforWindows10Cfg.exe > NUL 2>&1
-timeout /t 10 /nobreak
-del OldCalculatorforWindows10Cfg.exe > NUL 2>&1
-cls
-echo.
-echo  :: Installing hardentools
-echo.
-start hardentoolsCfg.exe > NUL 2>&1
-timeout /t 60 /nobreak
-del hardentoolsCfg.exe > NUL 2>&1
 reg add "HKCU\SOFTWARE\Microsoft\Windows\CurrentVersion\Explorer\Advanced" /v ShowSuperHidden /t REG_DWORD /d 0 /f > NUL 2>&1
 
 goto reboot
