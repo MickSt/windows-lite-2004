@@ -203,9 +203,6 @@ echo 'rm -rf Windows/SystemApps/Microsoft.MicrosoftEdge*' | cat - remove.sh > te
 echo 'rm -rf Windows/SystemApps/Microsoft.Windows.Cortana*' | cat - remove.sh > temp && mv temp remove.sh
 echo 'rm -rf Windows/SystemApps/Microsoft.XboxGameCallableUI*' | cat - remove.sh > temp && mv temp remove.sh
 echo 'rm -rf Windows/SystemApps/Microsoft.XboxIdentityProvider*' | cat - remove.sh > temp && mv temp remove.sh
-echo 'rm -rf Windows/diagnostics/system/Apps' | cat - remove.sh > temp && mv temp remove.sh
-echo 'rm -rf "Windows/System32/smartscreen.exe"' | cat - remove.sh > temp && mv temp remove.sh
-echo 'rm -rf "Windows/System32/smartscreenps.dll"' | cat - remove.sh > temp && mv temp remove.sh
 echo '#!/bin/bash' | cat - remove.sh > temp && mv temp remove.sh
 chmod +x remove.sh
 
